@@ -1,9 +1,12 @@
+/* Importando fontes do Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap");
+
 /* Estilos gerais */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Montserrat", sans-serif;
   margin: 0;
   padding: 0;
-  background-color: bisque;
+  background-color: #f8f8f8;
 }
 
 nav ul {
@@ -37,41 +40,130 @@ nav ul li a {
 
 /* Estilo das seções de vídeo */
 .video-section {
-  padding: 20px;
+  padding: 40px;
+  max-width: 1800px;
+  margin: 0 auto;
 }
 
 .video-section h2 {
-  margin-bottom: 15px;
+  font-family: "Playfair Display", serif;
+  font-size: 2.5em;
+  margin-bottom: 40px;
+  text-align: center;
+  color: #1a1a1a;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 .video-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+  padding: 20px;
 }
 
 .video-card {
-  width: 300px;
-  height: auto;
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
   cursor: pointer;
+}
+
+.video-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
 .video-thumbnail {
   position: relative;
   width: 100%;
-  height: 180.5px;
+  padding-top: 56.25%; /* Proporção 16:9 */
+  background: #000;
   overflow: hidden;
-  border-radius: 10px;
+  cursor: pointer;
 }
 
-.video-thumbnail video,
-.video-thumbnail img {
+.video-thumbnail video {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
+  cursor: pointer;
+  z-index: 1;
 }
 
-/* Estilos para a popup */
+/* Adicionando uma camada invisível para melhorar a área clicável */
+.video-thumbnail::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.video-card:hover .video-thumbnail video {
+  transform: scale(1.02); /* Reduzido um pouco o zoom para não distorcer muito o vídeo em reprodução */
+}
+
+/* Overlay com gradiente ao passar o mouse */
+.video-thumbnail::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.video-card:hover .video-thumbnail::after {
+  opacity: 1;
+}
+
+/* Botão de play estilizado */
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.play-button::after {
+  content: "";
+  border-style: solid;
+  border-width: 12px 0 12px 20px;
+  border-color: transparent transparent transparent #000;
+  margin-left: 4px;
+}
+
+.video-card:hover .play-button {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Estilo do popup de vídeo melhorado */
 .video-popup {
   display: none;
   position: fixed;
@@ -79,50 +171,122 @@ nav ul li a {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  justify-content: center;
-  align-items: center;
+  background-color: rgba(0, 0, 0, 0.95);
   z-index: 1000;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
 }
 
-.video-popup video {
-  max-width: 80%;
-  max-height: 80%;
+.video-popup.active {
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  position: relative;
+  width: 80%;
+  max-width: 1200px;
+  background: #000;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.video-popup.active .popup-content {
+  transform: scale(1);
+}
+
+.popup-content video {
+  width: 100%;
+  display: block;
 }
 
 .close-btn {
   position: absolute;
   top: 20px;
   right: 20px;
-  background-color: #fff;
+  background: rgba(255, 255, 255, 0.2);
   border: none;
-  padding: 10px 15px;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   cursor: pointer;
-  font-size: 16px;
-  z-index: 1001;
-}
-.video-card {
-  width: 300px;
-  height: auto;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
 }
 
-.video-card:hover {
-  transform: scale(1.05);
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
 }
 
+.close-btn::before,
+.close-btn::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background-color: white;
+}
+
+.close-btn::before {
+  transform: rotate(45deg);
+}
+
+.close-btn::after {
+  transform: rotate(-45deg);
+}
+
+/* Botão de som */
+.sound-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 3;
+}
+
+.sound-button i {
+  color: #000;
+  font-size: 14px;
+}
+
+.video-card:hover .sound-button {
+  opacity: 1;
+}
+
+/* Responsividade */
 @media (max-width: 768px) {
-  #searchBar {
-    width: 80%;
+  .video-section {
+    padding: 20px;
   }
 
   .video-gallery {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
   }
 
-  .video-card {
-    width: 90%;
+  .video-section h2 {
+    font-size: 2em;
+    margin-bottom: 30px;
   }
 }
