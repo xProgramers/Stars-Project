@@ -1,37 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap");
+
 body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: bisque;
-  }
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  font-family: "Montserrat", sans-serif;
+}
 
-  header {
-    display: flex;
-    justify-content: space-around;
-    width: 90%;
-  }
+header {
+  display: flex;
+  justify-content: space-around;
+  width: 90%;
+  gap: 30px;
+}
 
-  .card {
-    background-color: white;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
-  }
+.card {
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  width: 300px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
 
-  .card img {
-    max-width: 100%;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  a {
-    color: orangered;
-    text-decoration: none;
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: bold;
-    font-size: 2em;
-  }
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.card img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.card a {
+  color: #1a1a1a;
+  text-decoration: none;
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  font-size: 1.5em;
+  display: block;
+  margin-top: 10px;
+  transition: color 0.3s ease;
+}
+
+.card a:hover {
+  color: #ff4d4d;
+}
