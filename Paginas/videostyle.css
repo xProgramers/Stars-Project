@@ -290,3 +290,48 @@ nav ul li a {
     margin-bottom: 30px;
   }
 }
+
+/* Estilos para o sistema de avaliação dos vídeos */
+.video-rating {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 10;
+  display: inline-flex; /* Usa inline-flex para ajustar ao conteúdo */
+  width: fit-content; /* Ajusta ao conteúdo */
+  height: fit-content; /* Ajusta ao conteúdo */
+}
+
+.video-rating .rating-star {
+  cursor: pointer;
+  color: transparent;
+  -webkit-text-stroke: 1px #fff;
+  font-size: 16px;
+  transition: all 0.3s;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  width: 16px; /* Largura fixa igual ao font-size */
+  height: 16px; /* Altura fixa igual ao font-size */
+  display: none; /* Esconde todas as estrelas inicialmente */
+  line-height: 1;
+}
+
+/* Mostra apenas a primeira estrela inicialmente */
+.video-rating .rating-star:first-child {
+  opacity: 1;
+  display: block;
+}
+
+/* Mostra todas as estrelas no hover do container */
+.video-rating:hover .rating-star {
+  display: block;
+  opacity: 1;
+}
+
+.video-rating .rating-star.active {
+  color: #ffd700;
+  -webkit-text-stroke: 1px #ffd700;
+  opacity: 1;
+  display: block;
+}
