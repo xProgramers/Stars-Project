@@ -227,3 +227,66 @@ figure a::after {
     background-position: 100% 0;
   }
 }
+
+/* Estilos para o sistema de avaliação */
+.rating-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.rating-container:hover {
+  opacity: 1;
+}
+
+.rating-star {
+  cursor: pointer;
+  color: transparent;
+  -webkit-text-stroke: 1px #fff;
+  font-size: 20px;
+  margin: 0 2px;
+  transition: color 0.3s;
+}
+
+.rating-star.active {
+  color: #ffd700;
+  -webkit-text-stroke: 1px #ffd700;
+}
+
+#gallery figure .rating-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  border-radius: 5px;
+  pointer-events: auto;
+}
+
+#gallery figure .rating-container:hover {
+  opacity: 1;
+}
+
+#gallery figure .rating-star {
+  cursor: pointer;
+  color: transparent;
+  -webkit-text-stroke: 1px #fff;
+  font-size: 20px;
+  margin: 0 2px;
+  transition: color 0.3s;
+  display: inline-block;
+}
+
+#gallery figure .rating-star.active {
+  color: #ffd700;
+  -webkit-text-stroke: 1px #ffd700;
+}
