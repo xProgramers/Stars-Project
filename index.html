@@ -4,23 +4,112 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
-    <title>STARS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <title>STARS - Home</title>
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <header>
-      <div class="card">
-        <img src="/img/sophia.jpg" alt="Stars 1" />
-        <a href="/Paginas/stars.html">Stars</a>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">STARS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/Paginas/stars.html">Stars</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/Paginas/vintage_stars.html">Vintage Stars</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/Paginas/top_stars.html">Top Stars</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/Paginas/videos.html">Videos</a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="card">
-        <img src="/img/rita.jpg" alt="Stars 2" />
-        <a href="/Paginas/vintage_stars.html">Vintage Stars</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero d-flex align-items-center">
+      <div class="container text-center">
+        <h1 class="animate__animated animate__fadeInDown animate__delay-1s">Welcome to STARS</h1>
+        <p class="animate__animated animate__fadeInUp animate__delay-2s">Discover the most beautiful stars in the world</p>
+        <div class="mt-4 animate__animated animate__bounceIn animate__delay-3s">
+          <i class="fas fa-chevron-down fa-2x"></i>
+        </div>
       </div>
-      <div class="card">
-        <img src="/img/lea.jpg" alt="Stars 3" />
-        <a href="/Paginas/top_stars.html">Top Stars</a>
+    </section>
+
+    <!-- Featured Stars Section -->
+    <section class="featured-stars py-5">
+      <div class="container">
+        <div class="section-title text-center mb-5">
+          <h2 class="display-4">Featured Stars</h2>
+          <p class="lead">Discover our exclusive selection</p>
+        </div>
+
+        <div class="stars-gallery">
+          <div class="star-item animate__animated animate__fadeIn">
+            <div class="star-image-container">
+              <img src="img/emma.jpg" alt="Emma" class="star-image" />
+              <div class="star-overlay">
+                <a href="/Paginas/stars.html" class="star-link"> View More <i class="fas fa-arrow-right ms-2"></i> </a>
+              </div>
+            </div>
+            <h3 class="star-name">Emma</h3>
+            <p class="star-category">Stars</p>
+          </div>
+
+          <div class="star-item animate__animated animate__fadeIn">
+            <div class="star-image-container">
+              <img src="img/laure.jpg" alt="Laure" class="star-image" />
+              <div class="star-overlay">
+                <a href="/Paginas/vintage_stars.html" class="star-link"> View More <i class="fas fa-arrow-right ms-2"></i> </a>
+              </div>
+            </div>
+            <h3 class="star-name">Laure</h3>
+            <p class="star-category">Vintage Stars</p>
+          </div>
+
+          <div class="star-item animate__animated animate__fadeIn">
+            <div class="star-image-container">
+              <img src="img/naomi.jpg" alt="Naomi" class="star-image" />
+              <div class="star-overlay">
+                <a href="/Paginas/top_stars.html" class="star-link"> View More <i class="fas fa-arrow-right ms-2"></i> </a>
+              </div>
+            </div>
+            <h3 class="star-name">Naomi</h3>
+            <p class="star-category">Top Stars</p>
+          </div>
+        </div>
       </div>
-    </header>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 bg-dark text-white">
+      <div class="container text-center">
+        <div class="social-links mb-3">
+          <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+          <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+          <a href="#" class="text-white"><i class="fab fa-youtube fa-lg"></i></a>
+        </div>
+        <p class="mb-0">&copy; 2025 STARS. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
