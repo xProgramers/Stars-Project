@@ -335,3 +335,28 @@ nav ul li a {
   opacity: 1;
   display: block;
 }
+
+/* Estilos para o container de iframes */
+.iframe-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.iframe-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* Proporção 16:9 */
+  height: 0;
+  overflow: hidden;
+}
+
+.iframe-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
