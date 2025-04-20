@@ -42,6 +42,10 @@
         <div class="col-md-3">
           <div class="contos-list animate__animated animate__fadeInLeft">
             <h4>Contos Disponíveis</h4>
+            <div class="mb-3">
+              <button class="btn btn-sm btn-outline-primary me-2" id="btnOrdenarAlfabetico">A-Z</button>
+              <button class="btn btn-sm btn-outline-primary" id="btnOrdenarData">Data</button>
+            </div>
             <ul class="list-group" id="lista-contos">
               <!-- A lista de contos será inserida aqui -->
             </ul>
@@ -92,9 +96,19 @@
       const botaoBusca = document.querySelector('button[type="submit"]');
 
       // Funções
-      function carregarListaContos() {
+      function carregarListaContos(ordenacao = "data") {
         listaContos.innerHTML = "";
-        Object.keys(window.contos).forEach((titulo) => {
+        let contosOrdenados = Object.keys(window.contos);
+
+        if (ordenacao === "alfabetica") {
+          contosOrdenados.sort();
+        } else if (ordenacao === "data") {
+          contosOrdenados.sort((a, b) => {
+            return new Date(window.contos[b].data) - new Date(window.contos[a].data);
+          });
+        }
+
+        contosOrdenados.forEach((titulo) => {
           const li = document.createElement("li");
           li.className = "list-group-item";
           li.textContent = titulo;
@@ -184,38 +198,54 @@
         carregarContosFirebase();
 
         const brightnessToggle = document.getElementById("brightnessToggle");
+        const btnOrdenarAlfabetico = document.getElementById("btnOrdenarAlfabetico");
+        const btnOrdenarData = document.getElementById("btnOrdenarData");
         let currentMode = localStorage.getItem("readingMode") || "light";
+        let currentOrdenacao = localStorage.getItem("ordenacaoContos") || "data";
+
+        // Aplica o modo de leitura salvo ao carregar a página
+        document.body.classList.add(`${currentMode}-mode`);
 
         brightnessToggle.addEventListener("click", function () {
-          const body = document.body;
-          switch (currentMode) {
-            case "light":
-              body.classList.remove("light-mode");
-              body.classList.add("dark-mode");
-              currentMode = "dark";
-              break;
-            case "dark":
-              body.classList.remove("dark-mode");
-              body.classList.add("sepia-mode");
-              currentMode = "sepia";
-              break;
-            case "sepia":
-              body.classList.remove("sepia-mode");
-              body.classList.add("light-mode");
-              currentMode = "light";
-              break;
+          // Remove todas as classes de modo primeiro
+          document.body.classList.remove("light-mode", "dark-mode", "sepia-mode");
+
+          // Determina o próximo modo
+          if (currentMode === "light") {
+            currentMode = "dark";
+          } else if (currentMode === "dark") {
+            currentMode = "sepia";
+          } else {
+            currentMode = "light";
           }
+
+          // Adiciona a nova classe de modo
+          document.body.classList.add(`${currentMode}-mode`);
+
+          // Salva o novo modo
           localStorage.setItem("readingMode", currentMode);
         });
 
-        // Aplica o modo de leitura salvo
-        document.body.classList.add(`${currentMode}-mode`);
-      });
+        btnOrdenarAlfabetico.addEventListener("click", () => {
+          currentOrdenacao = "alfabetica";
+          localStorage.setItem("ordenacaoContos", currentOrdenacao);
+          carregarListaContos(currentOrdenacao);
+        });
 
-      campoBusca.addEventListener("input", (e) => filtrarContos(e.target.value));
-      botaoBusca.addEventListener("click", (e) => {
-        e.preventDefault();
-        filtrarContos(campoBusca.value);
+        btnOrdenarData.addEventListener("click", () => {
+          currentOrdenacao = "data";
+          localStorage.setItem("ordenacaoContos", currentOrdenacao);
+          carregarListaContos(currentOrdenacao);
+        });
+
+        // Aplica a ordenação salva
+        carregarListaContos(currentOrdenacao);
+
+        campoBusca.addEventListener("input", (e) => filtrarContos(e.target.value));
+        botaoBusca.addEventListener("click", (e) => {
+          e.preventDefault();
+          filtrarContos(campoBusca.value);
+        });
       });
     </script>
   </body>
