@@ -214,3 +214,27 @@ document.getElementById("iframePopup").addEventListener("click", function (e) {
     closeIframePopup();
   }
 });
+
+// Dark Mode Toggle
+const darkModeToggle = document.getElementById("darkModeToggle");
+const body = document.body;
+
+// Check for saved dark mode preference
+const darkMode = localStorage.getItem("darkMode");
+if (darkMode === "enabled") {
+  body.classList.add("dark-mode");
+  darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+}
+
+darkModeToggle.addEventListener("click", () => {
+  body.classList.toggle("dark-mode");
+
+  // Save preference to localStorage
+  if (body.classList.contains("dark-mode")) {
+    localStorage.setItem("darkMode", "enabled");
+    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+  } else {
+    localStorage.setItem("darkMode", null);
+    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+  }
+});
