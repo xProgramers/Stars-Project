@@ -28,6 +28,9 @@
               <a class="nav-link" href="/Paginas/contos.html">Contos Eróticos</a>
               <a class="nav-link" href="/Paginas/admin.html" style="color: #dc3545">Admin</a>
             </div>
+            <button class="btn btn-outline-secondary" id="darkModeToggle">
+              <i class="fas fa-moon"></i>
+            </button>
           </div>
         </div>
       </nav>
@@ -39,23 +42,28 @@
       <!-- Adicionar navegação por abas -->
       <ul class="nav nav-tabs mb-4" id="videoTabs" role="tablist">
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="rapidinhas-tab" data-bs-toggle="tab" data-bs-target="#rapidinhas" type="button" role="tab">Rapidinhas</button>
+          <button class="nav-link active" id="achadinhoss-tab" data-bs-toggle="tab" data-bs-target="#achadinhoss-content" type="button" role="tab">Achadinhos</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="rapidinhas-tab" data-bs-toggle="tab" data-bs-target="#rapidinhas" type="button" role="tab">Rapidinhas</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="sfm-tab" data-bs-toggle="tab" data-bs-target="#sfm-content" type="button" role="tab">SFM</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="achadinhoss-tab" data-bs-toggle="tab" data-bs-target="#achadinhoss-content" type="button" role="tab">Achadinhos</button>
         </li>
       </ul>
 
       <!-- Conteúdo das abas -->
       <div class="tab-content" id="videoTabsContent">
-        <!-- Aba Rapidinhas -->
-        <div class="tab-pane fade show active" id="rapidinhas" role="tabpanel">
-          <div class="video-gallery" id="rapidinhas-gallery">
-            <!-- Exemplo de Card de Vídeo -->
+        <!-- Aba achadinhoss -->
+        <div class="tab-pane fade show active" id="achadinhoss-content" role="tabpanel">
+          <div class="iframe-container" id="achadinhos-container">
+            <!-- Os iframes serão inseridos aqui dinamicamente -->
+          </div>
+        </div>
 
+        <!-- Aba Rapidinhas -->
+        <div class="tab-pane fade" id="rapidinhas" role="tabpanel">
+          <div class="video-gallery" id="rapidinhas-gallery">
             <div class="video-card" data-title="On Solid Ground">
               <div class="video-thumbnail">
                 <video class="preview" preload="metadata">
@@ -194,7 +202,7 @@
           </div>
         </div>
 
-        <!-- Aba Entrevistas -->
+        <!-- Aba SFM -->
         <div class="tab-pane fade" id="sfm-content" role="tabpanel">
           <div class="video-gallery" id="sfm-gallery">
             <div class="video-card" data-title="On Solid Ground">
@@ -205,13 +213,6 @@
               </div>
             </div>
             <!-- Adicione os vídeos de SFM aqui seguindo o mesmo padrão -->
-          </div>
-        </div>
-
-        <!-- Nova aba achadinhoss -->
-        <div class="tab-pane fade" id="achadinhoss-content" role="tabpanel">
-          <div class="iframe-container" id="achadinhos-container">
-            <!-- Os iframes serão inseridos aqui dinamicamente -->
           </div>
         </div>
       </div>
