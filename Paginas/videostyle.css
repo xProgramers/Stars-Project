@@ -649,3 +649,37 @@ nav ul li a {
   height: 100%;
   border: none;
 }
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+body.dark-mode .navbar {
+  background-color: #2d2d2d !important;
+}
+
+body.dark-mode .nav-link {
+  color: #ffffff;
+}
+
+body.dark-mode .nav-tabs .nav-link {
+  color: #ffffff;
+  border-color: #404040;
+}
+
+body.dark-mode .nav-tabs .nav-link.active {
+  background-color: #404040;
+  color: #ffffff;
+  border-color: #505050;
+}
+
+body.dark-mode .video-card {
+  background-color: #2d2d2d;
+}
+
+body.dark-mode .video-popup,
+body.dark-mode .iframe-popup {
+  background-color: rgba(0, 0, 0, 0.9);
+}
