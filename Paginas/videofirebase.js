@@ -37,6 +37,14 @@ async function carregarVideosAchadinhos() {
       const videoContainer = document.createElement("div");
       videoContainer.className = "video-container";
 
+      // Adiciona evento de clique para abrir o popup
+      videoContainer.addEventListener("click", function () {
+        const iframe = this.querySelector("iframe");
+        const iframeUrl = iframe.src;
+        const title = this.querySelector(".video-info h3").textContent;
+        openIframePopup(iframeUrl, title);
+      });
+
       // Cria o elemento para o título
       const info = document.createElement("div");
       info.className = "video-info";
