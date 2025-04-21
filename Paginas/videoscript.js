@@ -157,3 +157,60 @@ document.addEventListener("keydown", function (e) {
     closePopup();
   }
 });
+
+// Funções para manipular o popup de iframe
+function openIframePopup(iframeUrl, title) {
+  const popup = document.getElementById("iframePopup");
+  const popupHTML = `
+    <div class="popup-content">
+      <button class="close-btn" onclick="closeIframePopup()"></button>
+      <div class="iframe-wrapper">
+        <iframe src="${iframeUrl}" allowfullscreen></iframe>
+      </div>
+    </div>
+  `;
+
+  popup.innerHTML = popupHTML;
+  popup.style.display = "flex";
+
+  setTimeout(() => {
+    popup.classList.add("active");
+  }, 10);
+}
+
+function closeIframePopup() {
+  const popup = document.getElementById("iframePopup");
+  popup.classList.remove("active");
+
+  setTimeout(() => {
+    popup.style.display = "none";
+    popup.innerHTML = "";
+  }, 300);
+}
+
+// Adicionar evento de click nos containers de vídeo
+document.addEventListener("DOMContentLoaded", function () {
+  const videoContainers = document.querySelectorAll(".video-container");
+
+  videoContainers.forEach((container) => {
+    container.addEventListener("click", function () {
+      const iframe = container.querySelector("iframe");
+      const iframeUrl = iframe.src;
+      const title = container.querySelector(".video-info h3").textContent;
+      openIframePopup(iframeUrl, title);
+    });
+  });
+});
+
+// Fechar popup ao clicar fora ou pressionar ESC
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") {
+    closeIframePopup();
+  }
+});
+
+document.getElementById("iframePopup").addEventListener("click", function (e) {
+  if (e.target === this) {
+    closeIframePopup();
+  }
+});
