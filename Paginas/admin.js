@@ -22,25 +22,30 @@ const SENHA_ADMIN = "admin123";
 
 // Elementos DOM
 const loginForm = document.getElementById("login-form");
-const contoForm = document.getElementById("conto-form");
+const adminContent = document.getElementById("admin-content");
 const listaContos = document.getElementById("lista-contos");
+const listaVideos = document.getElementById("lista-videos");
 const senhaInput = document.getElementById("senha");
 const btnLogin = document.getElementById("btn-login");
-const btnSalvar = document.getElementById("btn-salvar");
+const btnSalvarConto = document.getElementById("btn-salvar-conto");
+const btnSalvarVideo = document.getElementById("btn-salvar-video");
 const btnSair = document.getElementById("btn-sair");
-const mensagem = document.getElementById("mensagem");
+const mensagemConto = document.getElementById("mensagem-conto");
+const mensagemVideo = document.getElementById("mensagem-video");
 
 // Event Listeners
 btnLogin.addEventListener("click", fazerLogin);
-btnSalvar.addEventListener("click", salvarConto);
+btnSalvarConto.addEventListener("click", salvarConto);
+btnSalvarVideo.addEventListener("click", salvarVideo);
 btnSair.addEventListener("click", sair);
 
 // Verifica se já está logado ao carregar a página
 document.addEventListener("DOMContentLoaded", () => {
   const logado = localStorage.getItem("adminLogado");
   if (logado === "true") {
-    mostrarFormularioConto();
+    mostrarAdminContent();
     carregarListaContos();
+    carregarListaVideos();
   }
 });
 
@@ -50,18 +55,18 @@ function fazerLogin(e) {
 
   if (senhaInput.value === SENHA_ADMIN) {
     localStorage.setItem("adminLogado", "true");
-    mostrarFormularioConto();
-    mostrarMensagem("Login realizado com sucesso!", "success");
+    mostrarAdminContent();
+    mostrarMensagem("Login realizado com sucesso!", "success", mensagemConto);
   } else {
-    mostrarMensagem("Senha incorreta!", "danger");
+    mostrarMensagem("Senha incorreta!", "danger", mensagemConto);
     senhaInput.value = "";
   }
 }
 
-// Mostra o formulário de conto
-function mostrarFormularioConto() {
+// Mostra o conteúdo administrativo
+function mostrarAdminContent() {
   loginForm.style.display = "none";
-  contoForm.style.display = "block";
+  adminContent.style.display = "block";
 }
 
 // Salva um novo conto no Firestore
@@ -73,7 +78,7 @@ async function salvarConto(e) {
   const conteudo = document.getElementById("conteudo").value.trim();
 
   if (!titulo || !conteudo) {
-    mostrarMensagem("Preencha todos os campos obrigatórios!", "danger");
+    mostrarMensagem("Preencha todos os campos obrigatórios!", "danger", mensagemConto);
     return;
   }
 
@@ -89,11 +94,50 @@ async function salvarConto(e) {
     document.getElementById("categorias").value = "";
     document.getElementById("conteudo").value = "";
 
-    mostrarMensagem("Conto salvo no Firebase com sucesso!", "success");
+    mostrarMensagem("Conto salvo com sucesso!", "success", mensagemConto);
     carregarListaContos();
   } catch (error) {
     console.error("Erro ao salvar conto:", error);
-    mostrarMensagem("Erro ao salvar conto no Firebase!", "danger");
+    mostrarMensagem("Erro ao salvar conto!", "danger", mensagemConto);
+  }
+}
+
+// Salva um novo vídeo no Firestore
+async function salvarVideo(e) {
+  e.preventDefault();
+
+  const iframeUrl = document.getElementById("iframe-url").value.trim();
+  const titulo = document.getElementById("video-titulo").value.trim();
+
+  if (!iframeUrl || !titulo) {
+    mostrarMensagem("Preencha todos os campos obrigatórios!", "danger", mensagemVideo);
+    return;
+  }
+
+  try {
+    // Extrai a URL do src do iframe se for um código iframe completo
+    let finalUrl = iframeUrl;
+    if (iframeUrl.includes("<iframe")) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(iframeUrl, "text/html");
+      const iframe = doc.querySelector("iframe");
+      finalUrl = iframe ? iframe.src : iframeUrl;
+    }
+
+    await addDoc(collection(db, "Videos"), {
+      iframeUrl: finalUrl, // Salva apenas a URL
+      titulo,
+      data: new Date().toISOString(),
+    });
+
+    document.getElementById("iframe-url").value = "";
+    document.getElementById("video-titulo").value = "";
+
+    mostrarMensagem("Vídeo salvo com sucesso!", "success", mensagemVideo);
+    carregarListaVideos();
+  } catch (error) {
+    console.error("Erro ao salvar vídeo:", error);
+    mostrarMensagem("Erro ao salvar vídeo!", "danger", mensagemVideo);
   }
 }
 
@@ -101,18 +145,18 @@ async function salvarConto(e) {
 function sair() {
   localStorage.removeItem("adminLogado");
   loginForm.style.display = "block";
-  contoForm.style.display = "none";
+  adminContent.style.display = "none";
   senhaInput.value = "";
 }
 
 // Mostra mensagens de feedback
-function mostrarMensagem(texto, tipo) {
-  mensagem.textContent = texto;
-  mensagem.className = `mt-3 alert alert-${tipo}`;
-  mensagem.style.display = "block";
+function mostrarMensagem(texto, tipo, elemento) {
+  elemento.textContent = texto;
+  elemento.className = `mt-3 alert alert-${tipo}`;
+  elemento.style.display = "block";
 
   setTimeout(() => {
-    mensagem.style.display = "none";
+    elemento.style.display = "none";
   }, 3000);
 }
 
@@ -152,7 +196,47 @@ async function carregarListaContos() {
     });
   } catch (error) {
     console.error("Erro ao carregar contos:", error);
-    mostrarMensagem("Erro ao carregar lista de contos!", "danger");
+    mostrarMensagem("Erro ao carregar lista de contos!", "danger", mensagemConto);
+  }
+}
+
+// Função para carregar lista de vídeos
+async function carregarListaVideos() {
+  try {
+    const q = query(collection(db, "Videos"), orderBy("data", "desc"));
+    const snapshot = await getDocs(q);
+
+    listaVideos.innerHTML = "";
+
+    snapshot.forEach((doc) => {
+      const video = doc.data();
+      const li = document.createElement("li");
+      li.className = "list-group-item d-flex justify-content-between align-items-center";
+      li.innerHTML = `
+        <span>${video.titulo}</span>
+        <div>
+          <button class="btn btn-sm btn-primary me-2" data-id="${doc.id}">Editar</button>
+          <button class="btn btn-sm btn-danger" data-id="${doc.id}">Excluir</button>
+        </div>
+      `;
+      listaVideos.appendChild(li);
+    });
+
+    // Adiciona os event listeners para os botões
+    document.querySelectorAll(".btn-primary").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        editarVideo(e.target.dataset.id);
+      });
+    });
+
+    document.querySelectorAll(".btn-danger").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        excluirVideo(e.target.dataset.id);
+      });
+    });
+  } catch (error) {
+    console.error("Erro ao carregar vídeos:", error);
+    mostrarMensagem("Erro ao carregar lista de vídeos!", "danger", mensagemVideo);
   }
 }
 
@@ -169,12 +253,33 @@ async function editarConto(id) {
       document.getElementById("conteudo").value = conto.conteudo;
 
       // Modifica o botão de salvar para atualizar
-      btnSalvar.textContent = "Atualizar Conto";
-      btnSalvar.onclick = () => atualizarConto(id);
+      btnSalvarConto.textContent = "Atualizar Conto";
+      btnSalvarConto.onclick = () => atualizarConto(id);
     }
   } catch (error) {
     console.error("Erro ao carregar conto para edição:", error);
-    mostrarMensagem("Erro ao carregar conto para edição!", "danger");
+    mostrarMensagem("Erro ao carregar conto para edição!", "danger", mensagemConto);
+  }
+}
+
+// Função para editar vídeo
+async function editarVideo(id) {
+  try {
+    const videoRef = doc(db, "Videos", id);
+    const videoDoc = await getDoc(videoRef);
+
+    if (videoDoc.exists()) {
+      const video = videoDoc.data();
+      document.getElementById("iframe-url").value = video.iframeUrl;
+      document.getElementById("video-titulo").value = video.titulo;
+
+      // Modifica o botão de salvar para atualizar
+      btnSalvarVideo.textContent = "Atualizar Vídeo";
+      btnSalvarVideo.onclick = () => atualizarVideo(id);
+    }
+  } catch (error) {
+    console.error("Erro ao carregar vídeo para edição:", error);
+    mostrarMensagem("Erro ao carregar vídeo para edição!", "danger", mensagemVideo);
   }
 }
 
@@ -185,7 +290,7 @@ async function atualizarConto(id) {
   const conteudo = document.getElementById("conteudo").value.trim();
 
   if (!titulo || !conteudo) {
-    mostrarMensagem("Preencha todos os campos obrigatórios!", "danger");
+    mostrarMensagem("Preencha todos os campos obrigatórios!", "danger", mensagemConto);
     return;
   }
 
@@ -202,14 +307,46 @@ async function atualizarConto(id) {
     document.getElementById("titulo").value = "";
     document.getElementById("categorias").value = "";
     document.getElementById("conteudo").value = "";
-    btnSalvar.textContent = "Salvar Conto";
-    btnSalvar.onclick = salvarConto;
+    btnSalvarConto.textContent = "Salvar Conto";
+    btnSalvarConto.onclick = salvarConto;
 
-    mostrarMensagem("Conto atualizado com sucesso!", "success");
+    mostrarMensagem("Conto atualizado com sucesso!", "success", mensagemConto);
     carregarListaContos();
   } catch (error) {
     console.error("Erro ao atualizar conto:", error);
-    mostrarMensagem("Erro ao atualizar conto!", "danger");
+    mostrarMensagem("Erro ao atualizar conto!", "danger", mensagemConto);
+  }
+}
+
+// Função para atualizar vídeo
+async function atualizarVideo(id) {
+  const iframeUrl = document.getElementById("iframe-url").value.trim();
+  const titulo = document.getElementById("video-titulo").value.trim();
+
+  if (!iframeUrl || !titulo) {
+    mostrarMensagem("Preencha todos os campos obrigatórios!", "danger", mensagemVideo);
+    return;
+  }
+
+  try {
+    const videoRef = doc(db, "Videos", id);
+    await updateDoc(videoRef, {
+      iframeUrl,
+      titulo,
+      data: new Date().toISOString(),
+    });
+
+    // Limpa o formulário e restaura o botão de salvar
+    document.getElementById("iframe-url").value = "";
+    document.getElementById("video-titulo").value = "";
+    btnSalvarVideo.textContent = "Salvar Vídeo";
+    btnSalvarVideo.onclick = salvarVideo;
+
+    mostrarMensagem("Vídeo atualizado com sucesso!", "success", mensagemVideo);
+    carregarListaVideos();
+  } catch (error) {
+    console.error("Erro ao atualizar vídeo:", error);
+    mostrarMensagem("Erro ao atualizar vídeo!", "danger", mensagemVideo);
   }
 }
 
@@ -218,11 +355,25 @@ async function excluirConto(id) {
   if (confirm("Tem certeza que deseja excluir este conto?")) {
     try {
       await deleteDoc(doc(db, "Contos", id));
-      mostrarMensagem("Conto excluído com sucesso!", "success");
+      mostrarMensagem("Conto excluído com sucesso!", "success", mensagemConto);
       carregarListaContos();
     } catch (error) {
       console.error("Erro ao excluir conto:", error);
-      mostrarMensagem("Erro ao excluir conto!", "danger");
+      mostrarMensagem("Erro ao excluir conto!", "danger", mensagemConto);
+    }
+  }
+}
+
+// Função para excluir vídeo
+async function excluirVideo(id) {
+  if (confirm("Tem certeza que deseja excluir este vídeo?")) {
+    try {
+      await deleteDoc(doc(db, "Videos", id));
+      mostrarMensagem("Vídeo excluído com sucesso!", "success", mensagemVideo);
+      carregarListaVideos();
+    } catch (error) {
+      console.error("Erro ao excluir vídeo:", error);
+      mostrarMensagem("Erro ao excluir vídeo!", "danger", mensagemVideo);
     }
   }
 }
