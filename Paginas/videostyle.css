@@ -1,5 +1,5 @@
 /* Importando fontes do Google Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Raleway:wght@400;500;600;700&family=Bebas+Neue&display=swap");
 
 /* Estilos gerais */
 body {
@@ -336,27 +336,243 @@ nav ul li a {
   display: block;
 }
 
-/* Estilos para o container de iframes */
+/* Estilos para a aba Achadinhos */
 .iframe-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-  gap: 20px;
-  padding: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 40px;
+  max-width: 1800px;
+  margin: 0 auto;
+  background: #ffffff;
 }
 
-.iframe-wrapper {
+.video-container {
+  position: relative;
+  transition: transform 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.video-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.video-item {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%; /* Proporção 16:9 */
-  height: 0;
-  overflow: hidden;
+  padding-top: 56.25%; /* Mantém proporção 16:9 */
+  background: #000;
 }
 
-.iframe-wrapper iframe {
+.video-item iframe {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 8px;
+  border: none;
+}
+
+.video-info {
+  position: relative;
+  margin-top: 15px;
+  padding: 15px;
+  background: #fff;
+}
+
+.video-info h3 {
+  color: #2d3436;
+  font-size: 1.2rem;
+  font-family: "Bebas Neue", sans-serif;
+  margin: 0;
+  line-height: 1.4;
+  text-align: left;
+  letter-spacing: 0.5px;
+}
+
+/* Responsividade */
+@media (max-width: 1400px) {
+  .iframe-container {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 30px;
+    gap: 25px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .iframe-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .iframe-container {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .video-info h3 {
+    font-size: 1rem;
+  }
+}
+
+/* Estilos para a aba Achadinhos */
+.achadinhos-container {
+  padding: 20px;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+.achadinhos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 0 20px;
+}
+
+.achadinhos-header h3 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2rem;
+  color: #1a1a1a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  letter-spacing: 1px;
+}
+
+.achadinhos-header h3 i {
+  color: #dc3545;
+}
+
+.achadinhos-filter .btn {
+  margin-left: 10px;
+  transition: all 0.3s ease;
+}
+
+.achadinhos-filter .btn:hover {
+  transform: translateY(-2px);
+}
+
+.achadinhos-filter .btn.active {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+.achadinhos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  padding: 20px;
+}
+
+.achadinhos-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.achadinhos-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.achadinhos-thumbnail {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+  overflow: hidden;
+}
+
+.achadinhos-thumbnail iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.achadinhos-info {
+  padding: 15px;
+}
+
+.achadinhos-info h4 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.2rem;
+  margin: 0 0 5px 0;
+  color: #333;
+  letter-spacing: 0.5px;
+}
+
+.achadinhos-info p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Esqueleto de carregamento */
+.achadinhos-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  width: 100%;
+}
+
+.skeleton-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.skeleton-thumbnail {
+  width: 100%;
+  padding-top: 56.25%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-title {
+  height: 20px;
+  width: 80%;
+  margin: 15px;
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .achadinhos-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .achadinhos-filter {
+    margin-top: 15px;
+  }
+
+  .achadinhos-grid,
+  .achadinhos-skeleton {
+    grid-template-columns: 1fr;
+  }
 }
