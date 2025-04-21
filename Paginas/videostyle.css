@@ -339,32 +339,28 @@ nav ul li a {
 /* Estilos para a aba Achadinhos */
 .iframe-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  padding: 40px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 20px;
   max-width: 1800px;
   margin: 0 auto;
-  background: #ffffff;
 }
 
 .video-container {
   position: relative;
-  transition: transform 0.3s ease;
+  width: 100%;
+  background: #000;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
-.video-container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-
+/* Wrapper para manter proporção 16:9 */
 .video-item {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* Mantém proporção 16:9 */
-  background: #000;
+  padding-bottom: 56.25%; /* Proporção 16:9 */
 }
 
 .video-item iframe {
@@ -377,32 +373,52 @@ nav ul li a {
 }
 
 .video-info {
-  position: relative;
-  margin-top: 15px;
-  padding: 15px;
+  padding: 10px;
   background: #fff;
 }
 
 .video-info h3 {
-  color: #2d3436;
-  font-size: 1.2rem;
-  font-family: "Bebas Neue", sans-serif;
   margin: 0;
+  font-size: 1rem;
   line-height: 1.4;
-  text-align: left;
-  letter-spacing: 0.5px;
+  color: #333;
 }
 
-/* Responsividade */
+/* Hover effect */
+.video-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsividade ajustada */
 @media (max-width: 1400px) {
   .iframe-container {
     grid-template-columns: repeat(3, 1fr);
-    padding: 30px;
     gap: 25px;
   }
 }
 
 @media (max-width: 1024px) {
+  .iframe-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .iframe-container {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .iframe-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
   .iframe-container {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -417,6 +433,12 @@ nav ul li a {
 
   .video-info h3 {
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .iframe-container {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -575,4 +597,55 @@ nav ul li a {
   .achadinhos-skeleton {
     grid-template-columns: 1fr;
   }
+}
+
+/* Estilos para o popup de iframe */
+.iframe-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  z-index: 1000;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+}
+
+.iframe-popup.active {
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iframe-popup .popup-content {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  height: 80vh;
+  background: #000;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.iframe-popup.active .popup-content {
+  transform: scale(1);
+}
+
+.iframe-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.iframe-wrapper iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
