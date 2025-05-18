@@ -171,11 +171,10 @@ nav ul li a {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.9);
+  justify-content: center;
+  align-items: center;
   z-index: 1000;
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(8px);
 }
 
 .video-popup.active {
@@ -204,29 +203,31 @@ nav ul li a {
 .popup-content video {
   width: 100%;
   display: block;
+  max-width: 90%;
+  max-height: 90vh;
 }
 
 .close-btn {
   position: absolute;
   top: 20px;
   right: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: white;
   width: 40px;
   height: 40px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   cursor: pointer;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 2;
+  transition: all 0.3s ease;
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: rotate(90deg);
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
 }
 
 .close-btn::before,
@@ -236,6 +237,7 @@ nav ul li a {
   width: 20px;
   height: 2px;
   background-color: white;
+  transition: all 0.3s ease;
 }
 
 .close-btn::before {
@@ -274,93 +276,37 @@ nav ul li a {
   opacity: 1;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .video-section {
-    padding: 20px;
-  }
-
-  .video-gallery {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-  }
-
-  .video-section h2 {
-    font-size: 2em;
-    margin-bottom: 30px;
-  }
-}
-
-/* Estilos para o sistema de avaliação dos vídeos */
-.video-rating {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  z-index: 10;
-  display: inline-flex; /* Usa inline-flex para ajustar ao conteúdo */
-  width: fit-content; /* Ajusta ao conteúdo */
-  height: fit-content; /* Ajusta ao conteúdo */
-}
-
-.video-rating .rating-star {
-  cursor: pointer;
-  color: transparent;
-  -webkit-text-stroke: 1px #fff;
-  font-size: 16px;
-  transition: all 0.3s;
-  opacity: 0;
-  padding: 0;
-  margin: 0;
-  width: 16px; /* Largura fixa igual ao font-size */
-  height: 16px; /* Altura fixa igual ao font-size */
-  display: none; /* Esconde todas as estrelas inicialmente */
-  line-height: 1;
-}
-
-/* Mostra apenas a primeira estrela inicialmente */
-.video-rating .rating-star:first-child {
-  opacity: 1;
-  display: block;
-}
-
-/* Mostra todas as estrelas no hover do container */
-.video-rating:hover .rating-star {
-  display: block;
-  opacity: 1;
-}
-
-.video-rating .rating-star.active {
-  color: #ffd700;
-  -webkit-text-stroke: 1px #ffd700;
-  opacity: 1;
-  display: block;
-}
-
-/* Estilos para a aba Achadinhos */
+/* Atualize os estilos da grade de vídeos */
 .iframe-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
   padding: 20px;
   max-width: 1800px;
   margin: 0 auto;
+  align-items: start;
 }
 
 .video-container {
   position: relative;
-  width: 100%;
-  background: #000;
-  border-radius: 12px;
+  background: transparent;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  order: 0; /* Base order for all videos */
 }
 
-/* Wrapper para manter proporção 16:9 */
+.video-container.liked {
+  order: -1; /* Liked videos will appear first */
+  transform: scale(1.02); /* Subtle emphasis */
+}
+
 .video-item {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%; /* Proporção 16:9 */
+  padding-top: 56.25%; /* Proporção 16:9 */
+  background: #000;
+  overflow: hidden;
 }
 
 .video-item iframe {
@@ -373,149 +319,136 @@ nav ul li a {
 }
 
 .video-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px;
-  background: #fff;
+  width: 100%;
 }
 
-.video-info h3 {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.4;
+.video-info h3.video-title {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.3;
   color: #333;
+  margin: 0;
+  padding: 0;
+  transition: color 0.2s ease;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  cursor: pointer;
+  text-align: left;
 }
 
-/* Hover effect */
+/* Hover effects */
 .video-container:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.video-info h3.video-title:hover {
+  color: #dc3545;
 }
 
 /* Responsividade ajustada */
 @media (max-width: 1400px) {
   .iframe-container {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 1024px) {
   .iframe-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .iframe-container {
     grid-template-columns: 1fr;
+    gap: 15px;
     padding: 15px;
   }
 }
 
-@media (max-width: 1200px) {
-  .iframe-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* Modo escuro atualizado */
+body.dark-mode .video-info h3.video-title {
+  color: #ffffff;
 }
 
-@media (max-width: 900px) {
-  .iframe-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+body.dark-mode .video-container {
+  background: transparent;
 }
 
-@media (max-width: 768px) {
-  .iframe-container {
-    grid-template-columns: 1fr;
-    padding: 20px;
-    gap: 20px;
-  }
-
-  .video-info h3 {
-    font-size: 1rem;
-  }
+body.dark-mode .video-info {
+  background: transparent;
+  border: none;
 }
 
-@media (max-width: 576px) {
-  .iframe-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Estilos para a aba Achadinhos */
-.achadinhos-container {
-  padding: 20px;
-  max-width: 1800px;
-  margin: 0 auto;
-}
-
-.achadinhos-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  padding: 0 20px;
-}
-
-.achadinhos-header h3 {
-  font-family: "Bebas Neue", sans-serif;
-  font-size: 2rem;
-  color: #1a1a1a;
-  margin: 0;
+.audio-toggle {
+  position: absolute;
+  top: 10px; /* Alterado de bottom para top */
+  left: 10px; /* Alterado de right para left */
+  width: 25px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: #000;
+  cursor: pointer;
+  z-index: 3;
   display: flex;
   align-items: center;
-  letter-spacing: 1px;
-}
-
-.achadinhos-header h3 i {
-  color: #dc3545;
-}
-
-.achadinhos-filter .btn {
-  margin-left: 10px;
+  justify-content: center;
+  opacity: 0;
   transition: all 0.3s ease;
 }
 
-.achadinhos-filter .btn:hover {
-  transform: translateY(-2px);
+.video-thumbnail:hover .audio-toggle {
+  opacity: 1;
 }
 
-.achadinhos-filter .btn.active {
-  background-color: #dc3545;
-  color: white;
-  border-color: #dc3545;
+.audio-toggle:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
 }
 
-.achadinhos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 25px;
-  padding: 20px;
-}
-
-.achadinhos-card {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  background: white;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.achadinhos-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-}
-
-.achadinhos-thumbnail {
-  position: relative;
+/* Atualize os estilos do popup de iframe */
+.iframe-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding-top: 56.25%;
-  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-  overflow: hidden;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.achadinhos-thumbnail iframe {
+.iframe-popup.active {
+  display: flex;
+  opacity: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.iframe-popup .popup-content {
+  position: relative;
+  width: 95%;
+  height: 90vh;
+  max-width: 1600px;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+.iframe-popup iframe {
   position: absolute;
   top: 0;
   left: 0;
@@ -524,162 +457,79 @@ nav ul li a {
   border: none;
 }
 
-.achadinhos-info {
-  padding: 15px;
-}
-
-.achadinhos-info h4 {
-  font-family: "Bebas Neue", sans-serif;
-  font-size: 1.2rem;
-  margin: 0 0 5px 0;
-  color: #333;
-  letter-spacing: 0.5px;
-}
-
-.achadinhos-info p {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0;
-}
-
-/* Esqueleto de carregamento */
-.achadinhos-skeleton {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 25px;
-  width: 100%;
-}
-
-.skeleton-card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.skeleton-thumbnail {
-  width: 100%;
-  padding-top: 56.25%;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-.skeleton-title {
-  height: 20px;
-  width: 80%;
-  margin: 15px;
-  background: #f0f0f0;
-  border-radius: 4px;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  .achadinhos-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .achadinhos-filter {
-    margin-top: 15px;
-  }
-
-  .achadinhos-grid,
-  .achadinhos-skeleton {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Estilos para o popup de iframe */
-.iframe-popup {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.95);
-  z-index: 1000;
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(8px);
-}
-
-.iframe-popup.active {
-  opacity: 1;
+/* Ajuste o botão de fechar para melhor posicionamento */
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
 }
 
-.iframe-popup .popup-content {
-  position: relative;
-  width: 90%;
-  max-width: 1200px;
-  height: 80vh;
-  background: #000;
+/* Rating container styles */
+.rating-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent !important;
+  padding: 5px;
   border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-  transform: scale(0.9);
+  z-index: 3;
+}
+
+.video-container:hover .rating-container {
+  opacity: 1;
+}
+
+.rating-star {
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  background: transparent !important;
+}
+
+.rating-star.active {
+  color: #ffd700;
+}
+
+.video-container {
+  position: relative;
   transition: transform 0.3s ease;
 }
 
-.iframe-popup.active .popup-content {
-  transform: scale(1);
-}
-
-.iframe-wrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-.iframe-wrapper iframe {
-  width: 100%;
-  height: 100%;
+/* Like button styles */
+.like-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   border: none;
+  background: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-left: 10px;
 }
 
-/* Dark Mode Styles */
-body.dark-mode {
-  background-color: #1a1a1a;
-  color: #ffffff;
+.like-button i {
+  color: #666;
+  transition: color 0.3s ease;
 }
 
-body.dark-mode .navbar {
-  background-color: #2d2d2d !important;
+.like-button.liked i {
+  color: #ff4646;
+  font-weight: 900;
 }
 
-body.dark-mode .nav-link {
-  color: #ffffff;
-}
-
-body.dark-mode .nav-tabs .nav-link {
-  color: #ffffff;
-  border-color: #404040;
-}
-
-body.dark-mode .nav-tabs .nav-link.active {
-  background-color: #404040;
-  color: #ffffff;
-  border-color: #505050;
-}
-
-body.dark-mode .video-card {
-  background-color: #2d2d2d;
-}
-
-body.dark-mode .video-popup,
-body.dark-mode .iframe-popup {
-  background-color: rgba(0, 0, 0, 0.9);
+.like-count {
+  font-size: 14px;
+  color: #666;
 }
