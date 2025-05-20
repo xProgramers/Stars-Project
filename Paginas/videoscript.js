@@ -208,15 +208,35 @@ function createRatingStars(card, videoSource) {
   const savedRating = localStorage.getItem(`video-rating-${videoSource}`) || "0";
   card.dataset.rating = savedRating;
 
+  // Criar as 5 estrelas
   for (let i = 1; i <= 5; i++) {
     const star = document.createElement("span");
     star.innerHTML = "★";
     star.className = "rating-star";
     star.dataset.value = i;
 
+    // Adicionar classe active nas estrelas até o rating salvo
     if (i <= parseInt(savedRating)) {
       star.classList.add("active");
     }
+
+    // Atualizar o visual ao passar o mouse
+    star.addEventListener("mouseenter", function () {
+      const stars = ratingContainer.querySelectorAll(".rating-star");
+      const value = this.dataset.value;
+
+      stars.forEach((s, index) => {
+        s.classList.toggle("active", index < value);
+      });
+    });
+
+    // Restaurar visual ao sair do container
+    ratingContainer.addEventListener("mouseleave", function () {
+      const stars = this.querySelectorAll(".rating-star");
+      stars.forEach((s, index) => {
+        s.classList.toggle("active", index < savedRating);
+      });
+    });
 
     star.addEventListener("click", function (e) {
       e.stopPropagation();
