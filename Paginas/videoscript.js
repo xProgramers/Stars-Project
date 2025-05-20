@@ -1,3 +1,13 @@
+// Adicionar temporariamente ao início do seu arquivo JS para limpar dados antigos
+Object.keys(localStorage).forEach((key) => {
+  if (key.startsWith("video-like-")) {
+    localStorage.removeItem(key);
+  }
+  if (key.startsWith("video-likes-count-")) {
+    localStorage.removeItem(key);
+  }
+});
+
 // Manter apenas as funções de interface como:
 // - Controle de reprodução
 // - Sistema de avaliação
@@ -395,108 +405,6 @@ function initializeRatingSystem() {
   }
 }
 
-// Nova função para o sistema de likes
-function initializeLikeSystem() {
-  const achadinhosContainer = document.getElementById("achadinhos-container");
-
-  function createLikeButton(videoContainer, videoId) {
-    // Verificar se já existe um botão de like
-    const existingButton = videoContainer.querySelector(".like-button");
-    if (existingButton) {
-      return existingButton;
-    }
-
-    const likeButton = document.createElement("button");
-    likeButton.className = "like-button";
-
-    // Get saved like state from localStorage
-    const isLiked = localStorage.getItem(`video-like-${videoId}`) === "true";
-    const likeCount = parseInt(localStorage.getItem(`video-likes-count-${videoId}`) || "0");
-
-    videoContainer.dataset.likes = likeCount;
-
-    // Create heart icon and count
-    const icon = document.createElement("i");
-    icon.className = isLiked ? "fas fa-heart" : "far fa-heart";
-
-    const count = document.createElement("span");
-    count.className = "like-count";
-    count.textContent = likeCount;
-
-    if (isLiked) {
-      likeButton.classList.add("liked");
-    }
-
-    likeButton.appendChild(icon);
-    likeButton.appendChild(count);
-
-    likeButton.addEventListener("click", (e) => {
-      e.stopPropagation();
-      updateLike(videoContainer, likeButton, videoId);
-    });
-
-    return likeButton;
-  }
-
-  function updateLike(videoContainer, likeButton, videoId) {
-    const icon = likeButton.querySelector("i");
-    const countSpan = likeButton.querySelector(".like-count");
-    const isCurrentlyLiked = likeButton.classList.contains("liked");
-
-    // Toggle like state
-    const newLikeState = !isCurrentlyLiked;
-    const currentCount = parseInt(countSpan.textContent);
-    const newCount = newLikeState ? currentCount + 1 : currentCount - 1;
-
-    // Update UI
-    likeButton.classList.toggle("liked");
-    icon.className = newLikeState ? "fas fa-heart" : "far fa-heart";
-    countSpan.textContent = newCount;
-
-    // Update localStorage
-    localStorage.setItem(`video-like-${videoId}`, newLikeState);
-    localStorage.setItem(`video-likes-count-${videoId}`, newCount);
-    videoContainer.dataset.likes = newCount;
-
-    // Reorder videos
-    reorderVideos();
-  }
-
-  function reorderVideos() {
-    const videoContainers = Array.from(achadinhosContainer.querySelectorAll(".video-container"));
-
-    // Sort by like count (highest first)
-    videoContainers.sort((a, b) => {
-      const likesA = parseInt(a.dataset.likes) || 0;
-      const likesB = parseInt(b.dataset.likes) || 0;
-      return likesB - likesA;
-    });
-
-    // Reappend in new order
-    videoContainers.forEach((container) => {
-      achadinhosContainer.appendChild(container);
-    });
-  }
-
-  // Initialize likes for existing videos
-  function initializeExistingVideos() {
-    const videoContainers = achadinhosContainer.querySelectorAll(".video-container");
-    videoContainers.forEach((container) => {
-      const videoId = container.querySelector("iframe").src;
-      const likeButton = createLikeButton(container, videoId);
-      container.querySelector(".video-info").appendChild(likeButton);
-    });
-
-    // Initial sorting
-    reorderVideos();
-  }
-
-  // Initialize when container exists
-  if (achadinhosContainer) {
-    initializeExistingVideos();
-  }
-}
-
 // Adicionar ao DOMContentLoaded
 document.addEventListener("DOMContentLoaded", function () {
   // Remove qualquer inicialização anterior de likes
@@ -515,4 +423,120 @@ document.addEventListener("DOMContentLoaded", function () {
   if (mainGallery) {
     initializeRatings();
   }
+});
+
+// Nova função para o sistema de bookmarks
+function initializeBookmarkSystem() {
+  const achadinhosContainer = document.getElementById("achadinhos-container");
+
+  function createBookmarkButton(videoContainer, videoId) {
+    // Verificar se já existe um botão de bookmark
+    const existingButton = videoContainer.querySelector(".bookmark-button");
+    if (existingButton) {
+      return existingButton;
+    }
+
+    const bookmarkButton = document.createElement("button");
+    bookmarkButton.className = "bookmark-button";
+    bookmarkButton.title = "Adicionar aos favoritos";
+
+    // Verificar estado salvo do bookmark
+    const isBookmarked = localStorage.getItem(`video-bookmark-${videoId}`) === "true";
+
+    // Criar ícone
+    const icon = document.createElement("i");
+    icon.className = isBookmarked ? "fas fa-bookmark" : "far fa-bookmark";
+
+    if (isBookmarked) {
+      bookmarkButton.classList.add("bookmarked");
+      videoContainer.classList.add("bookmarked");
+    }
+
+    bookmarkButton.appendChild(icon);
+
+    bookmarkButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleBookmark(videoContainer, bookmarkButton, videoId);
+    });
+
+    return bookmarkButton;
+  }
+
+  function toggleBookmark(videoContainer, bookmarkButton, videoId) {
+    const icon = bookmarkButton.querySelector("i");
+    const isCurrentlyBookmarked = bookmarkButton.classList.contains("bookmarked");
+
+    // Alternar estado do bookmark
+    const newBookmarkState = !isCurrentlyBookmarked;
+
+    // Atualizar UI
+    bookmarkButton.classList.toggle("bookmarked");
+    videoContainer.classList.toggle("bookmarked");
+    icon.className = newBookmarkState ? "fas fa-bookmark" : "far fa-bookmark";
+
+    // Atualizar localStorage
+    localStorage.setItem(`video-bookmark-${videoId}`, newBookmarkState);
+
+    // Reordenar vídeos
+    reorderVideos();
+  }
+
+  function reorderVideos() {
+    const videoContainers = Array.from(achadinhosContainer.querySelectorAll(".video-container"));
+
+    // Ordenar: bookmarked primeiro, resto depois
+    videoContainers.sort((a, b) => {
+      const isBookmarkedA = a.classList.contains("bookmarked");
+      const isBookmarkedB = b.classList.contains("bookmarked");
+
+      if (isBookmarkedA === isBookmarkedB) return 0;
+      return isBookmarkedA ? -1 : 1;
+    });
+
+    // Reposicionar na nova ordem
+    videoContainers.forEach((container) => {
+      achadinhosContainer.appendChild(container);
+    });
+  }
+
+  // Inicializar bookmarks para vídeos existentes
+  function initializeExistingVideos() {
+    const videoContainers = achadinhosContainer.querySelectorAll(".video-container");
+    videoContainers.forEach((container) => {
+      const videoId = container.querySelector("iframe").src;
+      const bookmarkButton = createBookmarkButton(container, videoId);
+      container.querySelector(".video-info").appendChild(bookmarkButton);
+    });
+
+    // Ordenação inicial
+    reorderVideos();
+  }
+
+  // Inicializar quando o container existe
+  if (achadinhosContainer) {
+    initializeExistingVideos();
+  }
+}
+
+// Modificar o evento DOMContentLoaded
+document.addEventListener("DOMContentLoaded", function () {
+  const achadinhosContainer = document.getElementById("achadinhos-container");
+  if (achadinhosContainer) {
+    // Remover botões existentes para evitar duplicação
+    const existingButtons = achadinhosContainer.querySelectorAll(".bookmark-button");
+    existingButtons.forEach((button) => button.remove());
+
+    // Inicializar apenas o sistema de bookmarks
+    initializeBookmarkSystem();
+  }
+
+  // Inicializar ratings apenas para outras abas
+  const mainGallery = document.querySelector(".video-gallery");
+  if (mainGallery) {
+    initializeRatings();
+  }
+
+  // Setup interface de vídeo
+  setupVideoPreview();
+  setupIframePopups();
 });
