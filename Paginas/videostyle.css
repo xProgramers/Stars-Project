@@ -296,11 +296,6 @@ nav ul li a {
   order: 0; /* Base order for all videos */
 }
 
-.video-container.liked {
-  order: -1; /* Liked videos will appear first */
-  transform: scale(1.02); /* Subtle emphasis */
-}
-
 .video-item {
   position: relative;
   width: 100%;
@@ -541,8 +536,8 @@ body.dark-mode .video-info {
   transition: transform 0.3s ease;
 }
 
-/* Like button styles */
-.like-button {
+/* Bookmark button styles */
+.bookmark-button {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -551,19 +546,25 @@ body.dark-mode .video-info {
   padding: 5px 10px;
   cursor: pointer;
   margin-left: 10px;
+  transition: all 0.3s ease;
 }
 
-.like-button i {
+.bookmark-button i {
   color: #666;
   transition: color 0.3s ease;
+  font-size: 1.2em;
 }
 
-.like-button.liked i {
-  color: #ff4646;
-  font-weight: 900;
+.bookmark-button.bookmarked i {
+  color: #ffd700;
 }
 
-.like-count {
-  font-size: 14px;
-  color: #666;
+/* Prioridade para vídeos favoritados */
+.video-container {
+  transition: all 0.3s ease;
+  order: 1; /* Vídeos não favoritados ficam depois */
+}
+
+.video-container.bookmarked {
+  order: 0; /* Vídeos favoritados aparecem primeiro */
 }
