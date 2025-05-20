@@ -485,21 +485,55 @@ body.dark-mode .video-info {
   padding: 5px;
   border-radius: 15px;
   z-index: 3;
+  display: flex;
+  gap: 2px;
 }
 
 .video-container:hover .rating-container {
   opacity: 1;
 }
 
+/* Esconder todas as estrelas exceto a primeira */
 .rating-star {
   color: #fff;
   font-size: 20px;
   cursor: pointer;
-  background: transparent !important;
+  transition: all 0.3s ease;
+  display: none;
+}
+
+/* Mostrar apenas a primeira estrela */
+.rating-star:first-child {
+  display: block;
+}
+
+/* Mostrar todas as estrelas no hover do container */
+.rating-container:hover .rating-star {
+  display: block;
 }
 
 .rating-star.active {
   color: #ffd700;
+}
+
+/* Adicionar tooltip para indicar a funcionalidade */
+.rating-container::before {
+  content: "Avaliar";
+  position: absolute;
+  top: -25px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.rating-container:hover::before {
+  opacity: 1;
 }
 
 .video-container {
